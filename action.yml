@@ -1,0 +1,53 @@
+name: 'SolMarrow: Post to social media'
+description: 'Save a draft, schedule, or publish a social media post from your workflow, for example when you publish a release.'
+author: 'SolMarrow'
+branding:
+  icon: 'send'
+  color: 'blue'
+inputs:
+  api-key:
+    description: 'Your SolMarrow API key (smk_...). Create one in SolMarrow under Settings, API keys, and keep it in a repository secret.'
+    required: true
+  workspace-id:
+    description: 'The SolMarrow workspace the key belongs to (a workspace ID from SolMarrow).'
+    required: true
+  account-ids:
+    description: 'Social accounts to post to: IDs separated by commas or new lines. Not needed for drafts.'
+    required: false
+    default: ''
+  text:
+    description: 'The post text. You can use {{name}}, {{tag}}, {{url}}, {{repo}}, {{body}} and {{author}} from the release or event.'
+    required: false
+    default: '{{repo}} {{tag}} is out! {{url}}'
+  mode:
+    description: '"draft" (default; review it in SolMarrow first), "schedule" or "publish".'
+    required: false
+    default: 'draft'
+  schedule-at:
+    description: 'When to publish if mode is "schedule": ISO 8601 with an offset, for example 2026-12-01T09:00:00+06:00. At least 5 minutes ahead.'
+    required: false
+    default: ''
+  schedule-in-minutes:
+    description: 'Alternative to schedule-at: publish this many minutes from now (5 or more).'
+    required: false
+    default: ''
+  media-urls:
+    description: 'Public https links to images or videos to attach, one per line.'
+    required: false
+    default: ''
+  per-account-text:
+    description: 'Different text for some accounts, as JSON: {"<account id>": "text"}.'
+    required: false
+    default: ''
+  api-url:
+    description: 'The SolMarrow API address. Leave as it is.'
+    required: false
+    default: 'https://app.solmarrow.com/api/v1'
+outputs:
+  post-id:
+    description: 'The ID of the post in SolMarrow.'
+  status:
+    description: 'draft, scheduled or published, as you asked.'
+runs:
+  using: 'node20'
+  main: 'src/index.js'
